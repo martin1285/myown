@@ -1,14 +1,20 @@
 package com.nocta.myown.service;
 
-import com.nocta.myown.request.LoginRequest;
-import com.nocta.myown.request.UsuarioARegistrarRequest;
-import com.nocta.myown.response.AuthResponse;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.nocta.myown.entity.Usuario;
+import com.nocta.myown.request.ActualizarPerfilRequest;
+import com.nocta.myown.request.CambiarPasswordRequest;
+import com.nocta.myown.response.UsuarioResponse;
 
 public interface UsuarioService {
 	
-	public AuthResponse registrarUsuario(UsuarioARegistrarRequest uarr);
+	public UsuarioResponse actualizarUsuario(Usuario usuario, ActualizarPerfilRequest actualizarUsuarioRequest);
 	
+	public void cambiarPassword(Usuario usuario, CambiarPasswordRequest request);
 	
-	public AuthResponse loginUsuario(LoginRequest loginRequest);
+	public void eliminarCuenta(Usuario usuario, String passwordActual);
+	
+	public UsuarioResponse actualizarFotoPerfil(Usuario usuario, MultipartFile foto);
 
 }

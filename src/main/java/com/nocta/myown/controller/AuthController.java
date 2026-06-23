@@ -14,7 +14,7 @@ import com.nocta.myown.request.RefreshTokenRequest;
 import com.nocta.myown.request.UsuarioARegistrarRequest;
 import com.nocta.myown.response.AuthResponse;
 import com.nocta.myown.service.RefreshTokenService;
-import com.nocta.myown.service.UsuarioService;
+import com.nocta.myown.service.AuthService;
 
 import jakarta.validation.Valid;
 
@@ -22,11 +22,11 @@ import jakarta.validation.Valid;
 @RequestMapping("/auth")
 public class AuthController {
 	
-	private final UsuarioService usuarioService;
+	private final AuthService usuarioService;
 	
 	private final RefreshTokenService refreshTokenService;
 	
-	public AuthController(UsuarioService usuarioService, RefreshTokenService refreshTokenService) {
+	public AuthController(AuthService usuarioService, RefreshTokenService refreshTokenService) {
 			this.usuarioService = usuarioService;
 			this.refreshTokenService = refreshTokenService;
 	}

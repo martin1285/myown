@@ -2,104 +2,91 @@ package com.nocta.myown.service.impl;
 
 import java.time.LocalDateTime;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
-import com.nocta.myown.entity.RefreshToken;
 import com.nocta.myown.entity.Usuario;
 import com.nocta.myown.repository.UsuarioRepository;
-import com.nocta.myown.request.LoginRequest;
-import com.nocta.myown.request.UsuarioARegistrarRequest;
-import com.nocta.myown.response.AuthResponse;
-import com.nocta.myown.service.JwtService;
+import com.nocta.myown.request.ActualizarPerfilRequest;
+import com.nocta.myown.request.CambiarPasswordRequest;
+import com.nocta.myown.response.UsuarioResponse;
+import com.nocta.myown.service.ImagenService;
 import com.nocta.myown.service.RefreshTokenService;
 import com.nocta.myown.service.UsuarioService;
 
-
-
-
 @Service
-public class UsuarioServiceImpl implements UsuarioService {
+public class UsuarioServiceImpl implements UsuarioService{
 	
-	@Autowired
-	private UsuarioRepository usuarioRepository;
-
-	@Autowired
-	private PasswordEncoder passwordEncoder;
-
-	@Autowired
-	private JwtService jwtService;
-
-	@Autowired
-	private RefreshTokenService refreshTokenService;
+	private final UsuarioRepository usuarioRepository;
+	private final PasswordEncoder passwordEncoder;
+	private final RefreshTokenService refreshTokenService;
+	private final ImagenService imagenService;
+	
+	public UsuarioServiceImpl(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder
+			,RefreshTokenService refreshTokenService,ImagenService imagenService) {
+		this.usuarioRepository = usuarioRepository;
+		this.passwordEncoder = passwordEncoder;
+		this.refreshTokenService = refreshTokenService;
+		this.imagenService = imagenService;
+	}
 
 	@Override
 	@Transactional
-	public AuthResponse registrarUsuario(UsuarioARegistrarRequest request) {
+	public UsuarioResponse actualizarUsuario(Usuario usuario, ActualizarPerfilRequest request) {
+		if (request.telefono() != null) usuario.setTelefono(request.telefono());
+		if (request.descripcion() != null) usuario.setDescripcion(request.descripcion());
+		if (request.localidad() != null) usuario.setLocalidad(request.localidad());
+		if (request.matricula() != null) usuario.setMatricula(request.matricula());
+		if (request.nombreComercial() != null) usuario.setNombreComercial(request.nombreComercial());
+		
+		usuario.setUpdatedAt(LocalDateTime.now());
+		Usuario actualizado = usuarioRepository.save(usuario);
 
-	    if (usuarioRepository.existsByEmail(request.getEmail())) {
-	        return new AuthResponse(
-	                false,
-	                "El email ya está registrado",
-	                null,
-	                null,
-	                null,
-	                null,
-	                null
-	        );
-	    }
-
-	    Usuario usuario = new Usuario();
-	    usuario.setNombre(request.getNombre());
-	    usuario.setEmail(request.getEmail());
-	    usuario.setTelefono(request.getTelefono());
-	    usuario.setPasswordHash(passwordEncoder.encode(request.getPassword()));
-	    usuario.setActivo(true);
-	    usuario.setPerfilCompleto(false);
-	    usuario.setPlan("FREE");
-	    usuario.setSuscripcionActiva(false);
-	    usuario.setFechaAlta(LocalDateTime.now());
-	    usuario.setUpdatedAt(LocalDateTime.now());
-
-	    Usuario usuarioGuardado = usuarioRepository.save(usuario);
-
-	    String accessToken = jwtService.generarToken(usuarioGuardado);
-
-	    RefreshToken refreshToken = refreshTokenService.crearRefreshToken(usuarioGuardado);
-
-	    return new AuthResponse(
-	            true,
-	            "Usuario registrado correctamente",
-	            accessToken,
-	            refreshToken.getToken(),
-	            usuarioGuardado.getUsuarioId(),
-	            usuarioGuardado.getNombre(),
-	            usuarioGuardado.getEmail()
-	    );
+		return new UsuarioResponse(actualizado);
 	}
 
 	@Override
-	public AuthResponse loginUsuario(LoginRequest loginRequest) {
-		Usuario usuario = usuarioRepository.findByEmail(loginRequest.getEmail())
-				.orElseThrow(() -> new IllegalArgumentException("Email o contraseña incorrectos"));
+	public void cambiarPassword(Usuario usuario, CambiarPasswordRequest request) {
+
+		if(!request.confirmarPassword().equals(request.passwordNueva())) {
+			throw new IllegalArgumentException("las contraseñas no coinciden.");
+		}
+		if (!passwordEncoder.matches(request.passwordActual(), usuario.getPasswordHash())) {
+			throw new IllegalArgumentException("La contraseña actual es incorrecta");
+		}
+		usuario.setPasswordHash(passwordEncoder.encode(request.passwordNueva()));
+		usuario.setUpdatedAt(LocalDateTime.now());
 		
-		if(!passwordEncoder.matches(loginRequest.getPassword(), usuario.getPasswordHash())) {
-			throw new IllegalArgumentException("Email o contraseña incorrectos");
+		usuarioRepository.save(usuario);
+		
+	}
+
+	@Override
+	@Transactional
+	public void eliminarCuenta(Usuario usuario, String passwordActual) {
+		if (!passwordEncoder.matches(passwordActual, usuario.getPasswordHash())) {
+			throw new IllegalArgumentException("La contraseña es incorrecta");
 		}
 		
-		String token = jwtService.generarToken(usuario);
+		usuario.setActivo(false);
+		usuario.setUpdatedAt(LocalDateTime.now());
+		usuarioRepository.save(usuario);
 		
-		RefreshToken refreshToken = refreshTokenService.crearRefreshToken(usuario);
-		return new AuthResponse(
-				true,
-				"login correcto",
-				token,
-				refreshToken.getToken(),
-				usuario.getUsuarioId(),
-				usuario.getNombre(),
-				usuario.getEmail());
+		refreshTokenService.logout(usuario);
 	}
+	
+	 @Override
+	    public UsuarioResponse actualizarFotoPerfil(Usuario usuario, MultipartFile foto) {
+	        String url = imagenService.subirFotoPerfil(foto, usuario.getUsuarioId());
+
+	        usuario.setFotoUrl(url);
+	        usuario.setUpdatedAt(LocalDateTime.now());
+
+	        Usuario actualizado = usuarioRepository.save(usuario);
+	        return new UsuarioResponse(actualizado);
+	    }
+	
 
 }

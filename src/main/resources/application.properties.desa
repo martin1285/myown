@@ -1,0 +1,27 @@
+spring.application.name=myown
+
+#Desa
+spring.datasource.url=jdbc:postgresql://turntable.proxy.rlwy.net:32603/railway?options=-c%20TimeZone=UTC
+spring.datasource.username=postgres
+spring.datasource.password=qgSoUWqwRaktWjKGRNhGNUPXbQtfvXVc
+
+
+spring.jpa.hibernate.ddl-auto=none
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+spring.jpa.properties.hibernate.jdbc.time_zone=UTC
+spring.datasource.hikari.connection-init-sql=SET TIME ZONE 'UTC'
+
+##desa
+jwt.secret="k7Qm2vXpL9nRwZ4tYhB6cJdF8sEaU1oN"
+jwt.expiration-ms=36000000
+
+
+
+#Cloudinary desa
+cloudinary.cloud-name=dszqjwsua
+cloudinary.api-key=696374786298258
+cloudinary.api-secret=A8x7i3O4OzD9nLNc82E9_tGinyA
+
+
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
