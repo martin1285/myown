@@ -3,6 +3,8 @@ package com.nocta.myown.exception;
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -16,6 +18,8 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+	
+	private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<ErrorApi> argumentNotValidException(MethodArgumentNotValidException ex, HttpServletRequest req ){
@@ -52,6 +56,8 @@ public class GlobalExceptionHandler {
 	
 	@ExceptionHandler(IllegalArgumentException.class)
 	public ResponseEntity<ErrorApi> illegalArgumentError(IllegalArgumentException ex, HttpServletRequest req){
+		log.warn("Error de validación: {}", ex.getMessage());
+		
 		ErrorApi error = new ErrorApi(
 				LocalDateTime.now(),
 				HttpStatus.BAD_REQUEST.value(),
@@ -64,6 +70,7 @@ public class GlobalExceptionHandler {
 	
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ErrorApi> genericError(Exception ex, HttpServletRequest req){
+		log.error("Error no controlado en el servidor", ex);
 		ErrorApi error = new ErrorApi(
 				LocalDateTime.now(),
 				HttpStatus.INTERNAL_SERVER_ERROR.value(),

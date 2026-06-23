@@ -1,5 +1,7 @@
 package com.nocta.myown.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,6 +26,7 @@ import jakarta.validation.Valid;
 @RequestMapping("/usuario")
 public class UsuarioController {
 	
+	private static final Logger log = LoggerFactory.getLogger(UsuarioController.class);
 	private final UsuarioService usuarioService;
 	
 	public UsuarioController (UsuarioService usuarioService) {
@@ -66,6 +69,15 @@ public class UsuarioController {
             Authentication authentication,
             @RequestParam("foto") MultipartFile foto) {
         Usuario usuario = (Usuario) authentication.getPrincipal();
+        
+        log.info(
+                "Request actualizar foto. usuarioId={}, nombreArchivo={}, contentType={}, size={}",
+                usuario.getUsuarioId(),
+                foto != null ? foto.getOriginalFilename() : null,
+                foto != null ? foto.getContentType() : null,
+                foto != null ? foto.getSize() : null
+        );
+        
         UsuarioResponse response = usuarioService.actualizarFotoPerfil(usuario, foto);
         return ResponseEntity.ok(response);
     }
