@@ -2,6 +2,8 @@ package com.nocta.myown.service.impl;
 
 import java.time.LocalDateTime;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +20,8 @@ import com.nocta.myown.service.UsuarioService;
 
 @Service
 public class UsuarioServiceImpl implements UsuarioService{
+	
+	private static final Logger log = LoggerFactory.getLogger(UsuarioServiceImpl.class);
 	
 	private final UsuarioRepository usuarioRepository;
 	private final PasswordEncoder passwordEncoder;
@@ -79,8 +83,11 @@ public class UsuarioServiceImpl implements UsuarioService{
 	
 	 @Override
 	    public UsuarioResponse actualizarFotoPerfil(Usuario usuario, MultipartFile foto) {
+		 log.info("Inicio actualización foto perfil. usuarioId={}", usuario.getUsuarioId());
 	        String url = imagenService.subirFotoPerfil(foto, usuario.getUsuarioId());
 
+	        log.info("URL recibida desde ImagenService. usuarioId={}, url={}", usuario.getUsuarioId(), url);
+	        
 	        usuario.setFotoUrl(url);
 	        usuario.setUpdatedAt(LocalDateTime.now());
 
