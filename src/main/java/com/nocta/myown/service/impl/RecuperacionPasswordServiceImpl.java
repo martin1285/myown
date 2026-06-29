@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.nocta.myown.entity.RecuperacionPassword;
@@ -16,6 +17,7 @@ import com.nocta.myown.request.RestablecerPasswordRequest;
 import com.nocta.myown.service.EmailService;
 import com.nocta.myown.service.RecuperacionPasswordService;
 
+@Service
 public class RecuperacionPasswordServiceImpl implements RecuperacionPasswordService {
 	 private static final int MINUTOS_EXPIRACION = 15;
 	    private static final int MAX_INTENTOS = 5;
