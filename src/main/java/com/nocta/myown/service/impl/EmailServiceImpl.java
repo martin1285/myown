@@ -1,10 +1,13 @@
 package com.nocta.myown.service.impl;
 
+import org.springframework.stereotype.Service;
+
 import com.nocta.myown.service.EmailService;
 import com.resend.Resend;
 import com.resend.core.exception.ResendException;
 import com.resend.services.emails.model.CreateEmailOptions;
 
+@Service
 public class EmailServiceImpl implements EmailService {
 	
 	 private final Resend resend;
