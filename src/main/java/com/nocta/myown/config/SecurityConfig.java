@@ -36,7 +36,13 @@ public class SecurityConfig {
                         .xssProtection(Customizer.withDefaults())
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/registro", "/auth/login", "/auth/refresh", "/health").permitAll()
+                		.requestMatchers(
+                		        "/auth/registro",
+                		        "/auth/login",
+                		        "/auth/refresh",
+                		        "/auth/olvide-password",
+                		        "/auth/restablecer-password",
+                		        "/health").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(
