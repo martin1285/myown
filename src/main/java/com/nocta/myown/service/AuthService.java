@@ -11,6 +11,6 @@ public interface AuthService {
 	
 	public AuthResponse loginUsuario(LoginRequest loginRequest);
 	
-
+	public AuthResponse loginConGoogle(String idToken);
 
 }

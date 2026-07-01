@@ -13,9 +13,11 @@ import com.nocta.myown.repository.UsuarioRepository;
 import com.nocta.myown.request.LoginRequest;
 import com.nocta.myown.request.UsuarioARegistrarRequest;
 import com.nocta.myown.response.AuthResponse;
+import com.nocta.myown.response.GoogleUserInfo;
+import com.nocta.myown.service.AuthService;
+import com.nocta.myown.service.GoogleAuthService;
 import com.nocta.myown.service.JwtService;
 import com.nocta.myown.service.RefreshTokenService;
-import com.nocta.myown.service.AuthService;
 
 
 
@@ -34,6 +36,9 @@ public class AuthServiceImpl implements AuthService {
 
 	@Autowired
 	private RefreshTokenService refreshTokenService;
+	
+	@Autowired
+	private GoogleAuthService googleAuthService;
 
 	@Override
 	@Transactional
@@ -62,6 +67,7 @@ public class AuthServiceImpl implements AuthService {
 	    usuario.setSuscripcionActiva(false);
 	    usuario.setFechaAlta(LocalDateTime.now());
 	    usuario.setUpdatedAt(LocalDateTime.now());
+	    usuario.setProveedorAuth("EMAIL");
 
 	    Usuario usuarioGuardado = usuarioRepository.save(usuario);
 
@@ -100,6 +106,55 @@ public class AuthServiceImpl implements AuthService {
 				usuario.getUsuarioId(),
 				usuario.getNombre(),
 				usuario.getEmail());
+	}
+	
+	@Override
+	@Transactional
+	public AuthResponse loginConGoogle(String idToken) {
+	    GoogleUserInfo googleUser = googleAuthService.verificarToken(idToken);
+
+	    Usuario usuario = usuarioRepository.findByGoogleId(googleUser.googleId())
+	            .or(() -> usuarioRepository.findByEmail(googleUser.email()))
+	            .orElseGet(() -> crearUsuarioDesdeGoogle(googleUser));
+
+	    if (usuario.getGoogleId() == null) {
+	        usuario.setGoogleId(googleUser.googleId());
+	        usuario.setProveedorAuth("GOOGLE");
+	    }
+
+	    if (Boolean.FALSE.equals(usuario.getActivo())) {
+	        throw new IllegalArgumentException("La cuenta está desactivada");
+	    }
+
+	    usuario.setUltimoLogin(LocalDateTime.now());
+	    usuario = usuarioRepository.save(usuario);
+
+	    String accessToken = jwtService.generarToken(usuario);
+	    RefreshToken refreshToken = refreshTokenService.crearRefreshToken(usuario);
+
+	    return new AuthResponse(
+	            true,
+	            "Login exitoso",
+	            accessToken,
+	            refreshToken.getToken(),
+	            usuario.getUsuarioId(),
+	            usuario.getNombre(),
+	            usuario.getEmail());
+	}
+
+	private Usuario crearUsuarioDesdeGoogle(GoogleUserInfo googleUser) {
+	    Usuario nuevo = new Usuario();
+	    nuevo.setNombre(googleUser.nombre());
+	    nuevo.setEmail(googleUser.email());
+	    nuevo.setGoogleId(googleUser.googleId());
+	    nuevo.setFotoUrl(googleUser.fotoUrl());
+	    nuevo.setPasswordHash(null);
+	    nuevo.setProveedorAuth("GOOGLE");
+	    nuevo.setActivo(true);
+	    nuevo.setPerfilCompleto(false);
+	    nuevo.setFechaAlta(LocalDateTime.now());
+
+	    return usuarioRepository.save(nuevo);
 	}
 
 }

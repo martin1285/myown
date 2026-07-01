@@ -76,5 +76,8 @@ public class Usuario {
 	@Column(name = "updated_at")
 	private LocalDateTime  updatedAt;
 	
+	@Column(name = "proveedor_auth", length = 20)
+	private String proveedorAuth;
+	
 	
 }

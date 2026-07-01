@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nocta.myown.entity.Usuario;
+import com.nocta.myown.request.GoogleLoginRequest;
 import com.nocta.myown.request.LoginRequest;
 import com.nocta.myown.request.OlvidePasswordRequest;
 import com.nocta.myown.request.RefreshTokenRequest;
@@ -80,4 +81,9 @@ public class AuthController {
 	}
 	 
 
+	@PostMapping("/google")
+	public ResponseEntity<AuthResponse> loginConGoogle(@RequestBody @Valid GoogleLoginRequest request) {
+	    AuthResponse response = usuarioService.loginConGoogle(request.idToken());
+	    return ResponseEntity.ok().body(response);
+	}
 }
