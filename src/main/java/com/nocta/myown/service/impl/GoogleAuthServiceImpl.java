@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
 
+@Service
 public class GoogleAuthServiceImpl implements GoogleAuthService {
 	
 
