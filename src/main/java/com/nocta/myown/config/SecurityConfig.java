@@ -42,7 +42,8 @@ public class SecurityConfig {
                 		        "/auth/refresh",
                 		        "/auth/olvide-password",
                 		        "/auth/restablecer-password",
-                		        "/health").permitAll()
+                		        "/health",
+                		        "/auth/google").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(
