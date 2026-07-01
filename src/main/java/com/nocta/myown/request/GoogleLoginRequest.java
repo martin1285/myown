@@ -1,5 +1,8 @@
 package com.nocta.myown.request;
 
-public class GoogleLoginRequest {
+import jakarta.validation.constraints.NotBlank;
 
-}
+public record GoogleLoginRequest(
+        @NotBlank(message = "El idToken es requerido")
+        String idToken
+) {}
