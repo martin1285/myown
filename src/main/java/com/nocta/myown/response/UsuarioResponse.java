@@ -1,5 +1,7 @@
 package com.nocta.myown.response;
 
+import java.time.LocalDateTime;
+
 import com.nocta.myown.entity.Usuario;
 
 import lombok.AllArgsConstructor;
@@ -12,6 +14,7 @@ public record UsuarioResponse(
         String nombre,
         String email,
         String telefono,
+        String proveedor_auth,
         String localidad,
         String matricula,
         String descripcion,
@@ -19,7 +22,8 @@ public record UsuarioResponse(
         String fotoUrl,
         Boolean perfilCompleto,
         String plan,
-        Boolean suscripcionActiva
+        Boolean suscripcionActiva,
+        LocalDateTime fechaAlta
 ) {
     public UsuarioResponse(Usuario usuario) {
         this(
@@ -27,6 +31,7 @@ public record UsuarioResponse(
                 usuario.getNombre(),
                 usuario.getEmail(),
                 usuario.getTelefono(),
+                usuario.getProveedorAuth(),
                 usuario.getLocalidad(),
                 usuario.getMatricula(),
                 usuario.getDescripcion(),
@@ -34,7 +39,8 @@ public record UsuarioResponse(
                 usuario.getFotoUrl(),
                 usuario.getPerfilCompleto(),
                 usuario.getPlan(),
-                usuario.getSuscripcionActiva()
+                usuario.getSuscripcionActiva(),
+                usuario.getFechaAlta()
         );
     }
 }

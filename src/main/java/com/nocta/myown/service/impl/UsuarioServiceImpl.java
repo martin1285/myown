@@ -42,6 +42,7 @@ public class UsuarioServiceImpl implements UsuarioService{
 		if (request.telefono() != null) usuario.setTelefono(request.telefono());
 		if (request.descripcion() != null) usuario.setDescripcion(request.descripcion());
 		if (request.localidad() != null) usuario.setLocalidad(request.localidad());
+		if (request.cuilCuit() != null) usuario.setCuilCuit(request.cuilCuit());
 		if (request.matricula() != null) usuario.setMatricula(request.matricula());
 		if (request.nombreComercial() != null) usuario.setNombreComercial(request.nombreComercial());
 		

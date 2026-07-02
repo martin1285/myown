@@ -9,6 +9,9 @@ public record ActualizarPerfilRequest(
 
         @Size(max = 150, message = "Localidad demasiado larga")
         String localidad,
+        
+        @Pattern(regexp = "^[0-9\\-]{8,20}$", message = "Formato de CUIT/CUIL inválido")
+        String cuilCuit,
 
         @Size(max = 100, message = "Matrícula demasiado larga")
         String matricula,
