@@ -38,6 +38,9 @@ public class Usuario {
 	@Column(name = "telefono", length = 50)
 	private String telefono;
 	
+	@Column(name = "cuil_cuit", length = 50)
+	private String cuilCuit;
+	
 	@Column(name = "password_hash")
 	private String passwordHash;
 	
