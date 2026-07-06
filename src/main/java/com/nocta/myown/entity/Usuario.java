@@ -9,6 +9,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -82,5 +84,22 @@ public class Usuario {
 	@Column(name = "proveedor_auth", length = 20)
 	private String proveedorAuth;
 	
-	
+	@PrePersist
+	public void prePersist() {
+	    if (activo == null) activo = true;
+	    if (perfilCompleto == null) perfilCompleto = false;
+	    if (plan == null) plan = "FREE";
+	    if (suscripcionActiva == null) suscripcionActiva = false;
+	    if (proveedorAuth == null) proveedorAuth = "EMAIL";
+
+	    LocalDateTime ahora = LocalDateTime.now();
+
+	    if (fechaAlta == null) fechaAlta = ahora;
+	    if (updatedAt == null) updatedAt = ahora;
+	}
+
+	@PreUpdate
+	public void preUpdate() {
+	    updatedAt = LocalDateTime.now();
+	}
 }
