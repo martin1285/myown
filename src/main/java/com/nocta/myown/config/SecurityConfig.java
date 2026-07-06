@@ -38,6 +38,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                 		.requestMatchers(
                 		        "/auth/registro",
+                		        "/auth/registro/solicitar",
+                                "/auth/registro/verificar",
                 		        "/auth/login",
                 		        "/auth/refresh",
                 		        "/auth/olvide-password",
