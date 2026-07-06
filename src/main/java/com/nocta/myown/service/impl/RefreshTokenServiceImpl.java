@@ -80,7 +80,8 @@ public class RefreshTokenServiceImpl implements RefreshTokenService{
 				nuevoRefreshToken.getToken(),
 				usuario.getUsuarioId(),
 				usuario.getNombre(),
-				usuario.getEmail());
+				usuario.getEmail(),
+				usuario.getTelefono());
 	}
 
 
