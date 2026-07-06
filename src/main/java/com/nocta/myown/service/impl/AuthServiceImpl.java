@@ -121,6 +121,10 @@ public class AuthServiceImpl implements AuthService {
 	        usuario.setGoogleId(googleUser.googleId());
 	        usuario.setProveedorAuth("GOOGLE");
 	    }
+	    
+	    if (usuario.getFotoUrl() == null || usuario.getFotoUrl().isBlank()) {
+	        usuario.setFotoUrl(googleUser.fotoUrl());
+	    }
 
 	    if (Boolean.FALSE.equals(usuario.getActivo())) {
 	        throw new IllegalArgumentException("La cuenta está desactivada");
@@ -144,15 +148,23 @@ public class AuthServiceImpl implements AuthService {
 
 	private Usuario crearUsuarioDesdeGoogle(GoogleUserInfo googleUser) {
 	    Usuario nuevo = new Usuario();
+
 	    nuevo.setNombre(googleUser.nombre());
 	    nuevo.setEmail(googleUser.email());
 	    nuevo.setGoogleId(googleUser.googleId());
 	    nuevo.setFotoUrl(googleUser.fotoUrl());
+
 	    nuevo.setPasswordHash(null);
 	    nuevo.setProveedorAuth("GOOGLE");
+
 	    nuevo.setActivo(true);
 	    nuevo.setPerfilCompleto(false);
+
+	    nuevo.setPlan("FREE");
+	    nuevo.setSuscripcionActiva(false);
+
 	    nuevo.setFechaAlta(LocalDateTime.now());
+	    nuevo.setUpdatedAt(LocalDateTime.now());
 
 	    return usuarioRepository.save(nuevo);
 	}

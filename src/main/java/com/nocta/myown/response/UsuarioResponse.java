@@ -24,6 +24,7 @@ public record UsuarioResponse(
         Boolean perfilCompleto,
         String plan,
         Boolean suscripcionActiva,
+        Boolean activo,
         LocalDateTime fechaAlta
 ) {
     public UsuarioResponse(Usuario usuario) {
@@ -42,6 +43,7 @@ public record UsuarioResponse(
                 usuario.getPerfilCompleto(),
                 usuario.getPlan(),
                 usuario.getSuscripcionActiva(),
+                usuario.getActivo(),
                 usuario.getFechaAlta()
         );
     }
