@@ -155,7 +155,8 @@ public class RegistroServiceImpl implements RegistroService {
                 refreshToken.getToken(),
                 usuario.getUsuarioId(),
                 usuario.getNombre(),
-                usuario.getEmail()
+                usuario.getEmail(),
+                usuario.getTelefono()
         );
     }
 

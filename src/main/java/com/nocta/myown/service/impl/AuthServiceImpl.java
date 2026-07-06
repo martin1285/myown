@@ -52,6 +52,7 @@ public class AuthServiceImpl implements AuthService {
 	                null,
 	                null,
 	                null,
+	                null,
 	                null
 	        );
 	    }
@@ -82,7 +83,8 @@ public class AuthServiceImpl implements AuthService {
 	            refreshToken.getToken(),
 	            usuarioGuardado.getUsuarioId(),
 	            usuarioGuardado.getNombre(),
-	            usuarioGuardado.getEmail()
+	            usuarioGuardado.getEmail(),
+	            usuarioGuardado.getTelefono()
 	    );
 	}
 
@@ -105,7 +107,9 @@ public class AuthServiceImpl implements AuthService {
 				refreshToken.getToken(),
 				usuario.getUsuarioId(),
 				usuario.getNombre(),
-				usuario.getEmail());
+				usuario.getEmail(),
+				usuario.getTelefono());
+					
 	}
 	
 	@Override
@@ -143,7 +147,8 @@ public class AuthServiceImpl implements AuthService {
 	            refreshToken.getToken(),
 	            usuario.getUsuarioId(),
 	            usuario.getNombre(),
-	            usuario.getEmail());
+	            usuario.getEmail(),
+	            usuario.getTelefono());
 	}
 
 	private Usuario crearUsuarioDesdeGoogle(GoogleUserInfo googleUser) {
