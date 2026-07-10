@@ -39,6 +39,7 @@ public class UsuarioServiceImpl implements UsuarioService{
 	@Override
 	@Transactional
 	public UsuarioResponse actualizarUsuario(Usuario usuario, ActualizarPerfilRequest request) {
+		if (request.nombre() != null) usuario.setNombre(request.nombre());
 		if (request.telefono() != null) usuario.setTelefono(request.telefono());
 		if (request.descripcion() != null) usuario.setDescripcion(request.descripcion());
 		if (request.localidad() != null) usuario.setLocalidad(request.localidad());
