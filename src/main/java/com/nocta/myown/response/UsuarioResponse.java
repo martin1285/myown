@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public record UsuarioResponse(
         Integer id,
         String nombre,
+        String apellido,
         String email,
         String telefono,
         String cuilCuit,
@@ -32,6 +33,7 @@ public record UsuarioResponse(
         this(
                 usuario.getUsuarioId(),
                 usuario.getNombre(),
+                usuario.getApellido(),
                 usuario.getEmail(),
                 usuario.getTelefono(),
                 usuario.getCuilCuit(),

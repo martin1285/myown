@@ -31,6 +31,9 @@ public class Usuario {
 	@Column(name = "nombre", length = 150)
 	private String nombre;
 	
+	@Column(name = "apellido", length = 150)
+	private String apellido;
+	
 	@Column(name = "email", length = 150)
 	private String email;
 	

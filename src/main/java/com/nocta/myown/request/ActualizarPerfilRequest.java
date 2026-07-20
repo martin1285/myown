@@ -7,6 +7,10 @@ public record ActualizarPerfilRequest(
         @NotBlank(message = "El nombre es obligatorio")
         @Size(max = 150, message = "El nombre es demasiado largo")
         String nombre,
+        
+        @NotBlank(message = "El apellido es obligatorio")
+        @Size(max = 150, message = "El apellido es demasiado largo")
+        String apellido,
 
         @Pattern(regexp = "^[0-9+\\s\\-]{7,20}$", message = "Formato de teléfono inválido")
         String telefono,
