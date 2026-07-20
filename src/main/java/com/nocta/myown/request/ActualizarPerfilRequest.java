@@ -24,5 +24,7 @@ public record ActualizarPerfilRequest(
         String descripcion,
 
         @Size(max = 150, message = "Nombre comercial demasiado largo")
-        String nombreComercial
+        String nombreComercial,
+        
+        String tituloProfesional
 ) {}

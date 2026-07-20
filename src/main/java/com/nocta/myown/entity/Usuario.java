@@ -84,6 +84,9 @@ public class Usuario {
 	@Column(name = "proveedor_auth", length = 20)
 	private String proveedorAuth;
 	
+	@Column(name = "titulo_profesional", length = 150)
+	private String tituloProfesional;
+	
 	@PrePersist
 	public void prePersist() {
 	    if (activo == null) activo = true;
