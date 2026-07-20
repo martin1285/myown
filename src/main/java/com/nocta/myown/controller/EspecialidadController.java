@@ -26,11 +26,7 @@ public class EspecialidadController {
 	}
 	
 	
-	@GetMapping("/especialidades")
-	public ResponseEntity<List<EspecialidadResponse>> traerEspecialidades(Authentication authentication){
-		List<EspecialidadResponse> response = especialidadService.trearEspecialidades();
-		return ResponseEntity.ok(response);
-	}
+	
 	
 	@GetMapping
     public ResponseEntity<EspecialidadSyncResponse> traerEspecialidades() {
