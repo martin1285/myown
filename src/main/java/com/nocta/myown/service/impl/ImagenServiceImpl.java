@@ -18,6 +18,7 @@ import com.nocta.myown.service.ImagenService;
 public class ImagenServiceImpl implements ImagenService {
 
     private static final long TAMANIO_MAXIMO = 5 * 1024 * 1024; // 5 MB
+    private static final long TAMANIO_MAXIMO_LOGO = 2L * 1024L * 1024L;
     private static final List<String> TIPOS_PERMITIDOS = List.of("image/jpeg", "image/png", "image/webp");
     
     private static final Logger log = LoggerFactory.getLogger(ImagenServiceImpl.class);
@@ -44,7 +45,7 @@ public class ImagenServiceImpl implements ImagenService {
         } else {
             log.warn("Archivo recibido null. usuarioId={}", usuarioId);
         }
-        validarArchivo(archivo);
+        validarArchivo(archivo, TAMANIO_MAXIMO);
 
         try {
             Map<String, Object> opciones = ObjectUtils.asMap(
@@ -70,18 +71,46 @@ public class ImagenServiceImpl implements ImagenService {
             throw new RuntimeException("Error al subir la imagen", e);
         }
     }
+    
+    @Override
+    public String subirLogoTarjeta(Integer usuarioId, MultipartFile archivo) {
+    	validarArchivo(archivo, TAMANIO_MAXIMO_LOGO);
 
-    private void validarArchivo(MultipartFile archivo) {
+        try {
+            Map<?, ?> resultado = cloudinary.uploader().upload(
+                    archivo.getBytes(),
+                    ObjectUtils.asMap(
+                            "folder", "myown/tarjetas",
+                            "public_id", "logo_tarjeta_" + usuarioId,
+                            "overwrite", true,
+                            "resource_type", "image"
+                    )
+            );
+
+            Object secureUrl = resultado.get("secure_url");
+
+            if (secureUrl == null) {
+                throw new RuntimeException("Cloudinary no devolvió la URL del logo");
+            }
+
+            return secureUrl.toString();
+
+        } catch (IOException e) {
+            throw new RuntimeException("No se pudo subir el logo", e);
+        }
+    }
+
+    private void validarArchivo(MultipartFile archivo, long tamanio) {
         if (archivo == null || archivo.isEmpty()) {
             log.warn("Validación fallida: archivo vacío o null");
             throw new IllegalArgumentException("El archivo está vacío");
         }
 
-        if (archivo.getSize() > TAMANIO_MAXIMO) {
+        if (archivo.getSize() > tamanio) {
             log.warn(
                     "Validación fallida: archivo supera tamaño máximo. size={}, max={}",
                     archivo.getSize(),
-                    TAMANIO_MAXIMO
+                    tamanio
             );
             throw new IllegalArgumentException("El archivo no puede superar los 5MB");
         }

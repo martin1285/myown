@@ -5,4 +5,6 @@ import org.springframework.web.multipart.MultipartFile;
 public interface ImagenService {
     String subirFotoPerfil(MultipartFile archivo, Integer usuarioId);
     
+    public String subirLogoTarjeta(Integer usuarioId, MultipartFile archivo) ;
+    
 }
