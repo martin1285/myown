@@ -114,6 +114,9 @@ public class TarjetaConfiguracionServiceImpl implements TarjetaConfiguracionServ
         if ("MODELO_2".equals(disenio)) {
             return "MODELO_2";
         }
+        if ("MODELO_3".equals(disenio)) {
+            return "MODELO_3";
+        }
 
         return "MODELO_1";
     }
