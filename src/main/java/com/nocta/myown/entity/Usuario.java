@@ -3,9 +3,12 @@ package com.nocta.myown.entity;
 
 import java.time.LocalDateTime;
 
+import com.nocta.myown.enums.RolUsuario;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -89,6 +92,10 @@ public class Usuario {
 	
 	@Column(name = "titulo_profesional", length = 150)
 	private String tituloProfesional;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "rol", nullable = false, length = 20)
+	private RolUsuario rol;
 	
 	@PrePersist
 	public void prePersist() {
@@ -97,7 +104,7 @@ public class Usuario {
 	    if (plan == null) plan = "FREE";
 	    if (suscripcionActiva == null) suscripcionActiva = false;
 	    if (proveedorAuth == null) proveedorAuth = "EMAIL";
-
+	    if (rol == null)  rol = RolUsuario.USUARIO; 
 	    LocalDateTime ahora = LocalDateTime.now();
 
 	    if (fechaAlta == null) fechaAlta = ahora;

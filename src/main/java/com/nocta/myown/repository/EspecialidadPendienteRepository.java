@@ -9,12 +9,14 @@ import com.nocta.myown.enums.EstadoEspecialidadPendiente;
 
 public interface EspecialidadPendienteRepository extends JpaRepository<EspecialidadPendiente, Integer> {
 
-	boolean existsByNombreNormalizadoAndEstado(String nombreNormalizado, EstadoEspecialidadPendiente estado);
+	 boolean existsByNombreNormalizadoAndEstado(String nombreNormalizado, EstadoEspecialidadPendiente estado);
 
-	boolean existsByUsuarioUsuarioIdAndNombreNormalizadoAndEstado(Integer usuarioId, String nombreNormalizado,
-			EstadoEspecialidadPendiente estado);
+	 boolean existsByUsuarioUsuarioIdAndNombreNormalizadoAndEstado(Integer usuarioId, String nombreNormalizado,
+	            EstadoEspecialidadPendiente estado);
 
-	List<EspecialidadPendiente> findAllByUsuarioUsuarioIdOrderByCreatedAtDesc(Integer usuarioId);
+	 List<EspecialidadPendiente> findByUsuarioUsuarioIdOrderByCreatedAtDesc(Integer usuarioId);
 
-	List<EspecialidadPendiente> findAllByEstadoOrderByCreatedAtAsc(EstadoEspecialidadPendiente estado);
+	 List<EspecialidadPendiente> findAllByOrderByCreatedAtDesc();
+	 
+	 List<EspecialidadPendiente> findByEstadoOrderByCreatedAtAsc(EstadoEspecialidadPendiente estado);
 }

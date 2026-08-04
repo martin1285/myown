@@ -1,9 +1,11 @@
 package com.nocta.myown.security;
 
 import java.io.IOException;
-import java.util.Collections;
+import java.util.List;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
@@ -65,11 +67,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 return;
             }
 
+            List<GrantedAuthority> authorities = List.of(
+                    new SimpleGrantedAuthority(
+                            "ROLE_" + usuario.getRol().name()
+                    )
+            );
+
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(
                             usuario,
                             null,
-                            Collections.emptyList()
+                            authorities
                     );
 
             authentication.setDetails(

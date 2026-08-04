@@ -15,7 +15,8 @@ public interface EspecialidadRepository extends JpaRepository<Especialidad, Inte
     List<Especialidad> findByActivaTrueAndNombreContainingIgnoreCaseOrderByNombreAsc(String nombre);
 
     List<Especialidad> findByUpdatedAtAfterOrderByUpdatedAtAsc(LocalDateTime desde);
-
+    
+    boolean existsByNombreIgnoreCase(String nombre);
 	
 	long countByEspecialidadIdInAndActivaTrue(List<Integer> especialidadIds);	
 

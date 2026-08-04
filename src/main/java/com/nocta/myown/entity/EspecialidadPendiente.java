@@ -16,10 +16,12 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
+@Data
 @NoArgsConstructor
+@Entity
 @Table(name = "especialidad_pendiente")
 public class EspecialidadPendiente {
 
@@ -32,17 +34,17 @@ public class EspecialidadPendiente {
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
 
-    @Column(nullable = false, length = 100)
+    @Column(name = "nombre", nullable = false, length = 100)
     private String nombre;
 
     @Column(name = "nombre_normalizado", nullable = false, length = 100)
     private String nombreNormalizado;
 
-    @Column(length = 500)
+    @Column(name = "descripcion", length = 500)
     private String descripcion;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20)
+    @Column(name = "estado", nullable = false, length = 20)
     private EstadoEspecialidadPendiente estado;
 
     @Column(name = "motivo_rechazo", length = 500)
@@ -58,17 +60,19 @@ public class EspecialidadPendiente {
     @Column(name = "reviewed_at")
     private LocalDateTime reviewedAt;
 
-    @Column(name = "reviewed_by")
-    private Integer reviewedBy;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reviewed_by")
+    private Usuario reviewedBy;
 
     @PrePersist
     private void prePersist() {
-        createdAt = LocalDateTime.now();
+        if (createdAt == null) {
+            createdAt = LocalDateTime.now();
+        }
 
         if (estado == null) {
             estado = EstadoEspecialidadPendiente.PENDIENTE;
         }
     }
-
-    // Getters y setters
+    
 }

@@ -46,6 +46,7 @@ public class SecurityConfig {
                 		        "/auth/restablecer-password",
                 		        "/health",
                 		        "/auth/google").permitAll()
+                		.requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(

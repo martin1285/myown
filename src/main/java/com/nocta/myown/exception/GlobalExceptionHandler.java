@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.ErrorResponse;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -79,5 +81,62 @@ public class GlobalExceptionHandler {
 				req.getRequestURI());
 				
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+	}
+	
+	@ExceptionHandler(RecursoDuplicadoException.class)
+	public ResponseEntity<ErrorApi> manejarRecursoDuplicado(RecursoDuplicadoException exception, HttpServletRequest req) {
+	    
+		ErrorApi error = new ErrorApi(
+				LocalDateTime.now(),
+				HttpStatus.CONFLICT.value(),
+				"Recurso duplicado",
+				exception.getMessage(),
+				req.getRequestURI());
+		
+
+	    return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+	}
+	
+	@ExceptionHandler(RecursoNoEncontradoException.class)
+	public ResponseEntity<ErrorApi> manejarRecursoNoEncontrado(RecursoNoEncontradoException exception, HttpServletRequest req) {
+	    
+		ErrorApi error = new ErrorApi(
+				LocalDateTime.now(),
+				HttpStatus.CONFLICT.value(),
+				"Recurso no encontrado",
+				exception.getMessage(),
+				req.getRequestURI());
+		
+
+	    return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+	}
+	
+	@ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+	public ResponseEntity<ErrorApi	> manejarContentTypeNoSoportado(HttpMediaTypeNotSupportedException ex, HttpServletRequest request) {
+	   
+		ErrorApi error = new ErrorApi(
+	            LocalDateTime.now(),
+	            HttpStatus.UNSUPPORTED_MEDIA_TYPE.value(),
+	            "Unsupported Media Type",
+	            "El contenido debe enviarse como application/json",
+	            request.getRequestURI()
+	    );
+
+	    return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body(error);
+	}
+	
+	@ExceptionHandler(OperacionInvalidaException.class)
+	public ResponseEntity<ErrorApi> manejarOperacionInvalida(OperacionInvalidaException ex,
+	        HttpServletRequest request) {
+		
+		ErrorApi error = new ErrorApi(
+	            LocalDateTime.now(),
+	            HttpStatus.CONFLICT.value(),
+	            "Conflict",
+	            ex.getMessage(),
+	            request.getRequestURI()
+	    );
+
+	    return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
 	}
 }
