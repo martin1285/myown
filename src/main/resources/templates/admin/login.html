@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1">
+
+    <title>Administración - My Own</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            background: #f5f7fb;
+            color: #061a3a;
+            font-family: Arial, sans-serif;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 420px;
+            padding: 32px;
+            background: #ffffff;
+            border-radius: 18px;
+            box-shadow: 0 10px 35px rgba(6, 26, 58, 0.12);
+        }
+
+        .brand {
+            margin-bottom: 6px;
+            font-size: 27px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .subtitle {
+            margin: 0 0 28px;
+            color: #62718a;
+            font-size: 15px;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            height: 48px;
+            margin-bottom: 18px;
+            padding: 0 14px;
+            border: 1px solid #ccd5e2;
+            border-radius: 10px;
+            color: #061a3a;
+            font-size: 15px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+        }
+
+        button {
+            width: 100%;
+            height: 50px;
+            border: 0;
+            border-radius: 10px;
+            background: #061a3a;
+            color: #ffffff;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #0c2b58;
+        }
+
+        .mensaje {
+            margin-bottom: 18px;
+            padding: 12px;
+            border-radius: 9px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .error {
+            background: #fdecec;
+            color: #a52222;
+        }
+
+        .exito {
+            background: #e8f7ee;
+            color: #17683a;
+        }
+
+        .pie {
+            margin-top: 22px;
+            color: #7a8799;
+            font-size: 12px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+<main class="login-card">
+
+    <div class="brand">
+        My Own
+    </div>
+
+    <p class="subtitle">
+        Panel de administración
+    </p>
+
+    <div
+        th:if="${param.error}"
+        class="mensaje error">
+
+        Email, contraseña o permisos incorrectos.
+    </div>
+
+    <div
+        th:if="${param.logout}"
+        class="mensaje exito">
+
+        Cerraste sesión correctamente.
+    </div>
+
+    <form
+        th:action="@{/admin-login}"
+        method="post">
+
+        <label for="email">
+            Email
+        </label>
+
+        <input
+            id="email"
+            name="email"
+            type="email"
+            autocomplete="username"
+            required>
+
+        <label for="password">
+            Contraseña
+        </label>
+
+        <input
+            id="password"
+            name="password"
+            type="password"
+            autocomplete="current-password"
+            required>
+
+        <button type="submit">
+            Iniciar sesión
+        </button>
+
+    </form>
+
+    <div class="pie">
+        Acceso exclusivo para administradores.
+    </div>
+
+</main>
+
+</body>
+</html>

@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1">
+
+    <title>Especialidades sugeridas - My Own</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #f5f7fb;
+            color: #061a3a;
+            font-family: Arial, sans-serif;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 72px;
+            padding: 0 28px;
+            background: #061a3a;
+            color: #ffffff;
+        }
+
+        .brand {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .usuario {
+            color: #dce6f5;
+            font-size: 14px;
+        }
+
+        .logout-form {
+            margin: 0;
+        }
+
+        .logout-button {
+            border: 1px solid #ffffff;
+            border-radius: 8px;
+            padding: 9px 14px;
+            background: transparent;
+            color: #ffffff;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .logout-button:hover {
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 28px 20px 50px;
+        }
+
+        .titulo {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .subtitulo {
+            margin: 8px 0 24px;
+            color: #62718a;
+            font-size: 15px;
+        }
+
+        .mensaje {
+            margin-bottom: 20px;
+            padding: 14px 16px;
+            border-radius: 10px;
+            background: #e8f7ee;
+            color: #17683a;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .filtros {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+
+        .filtro {
+            display: inline-block;
+            border: 1px solid #cad3df;
+            border-radius: 20px;
+            padding: 9px 16px;
+            background: #ffffff;
+            color: #344563;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .filtro:hover {
+            border-color: #2563eb;
+            color: #2563eb;
+        }
+
+        .filtro-activo {
+            border-color: #061a3a;
+            background: #061a3a;
+            color: #ffffff;
+        }
+
+        .lista {
+            display: grid;
+            gap: 16px;
+        }
+
+        .tarjeta {
+            overflow: hidden;
+            border: 1px solid #e1e6ee;
+            border-radius: 14px;
+            background: #ffffff;
+            box-shadow: 0 4px 16px rgba(6, 26, 58, 0.06);
+        }
+
+        .tarjeta-principal {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 18px;
+            padding: 20px;
+        }
+
+        .nombre {
+            margin: 0;
+            color: #061a3a;
+            font-size: 19px;
+        }
+
+        .descripcion {
+            margin: 9px 0 0;
+            color: #46566f;
+            font-size: 14px;
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+
+        .datos {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 20px;
+            margin-top: 16px;
+            color: #708096;
+            font-size: 13px;
+        }
+
+        .estado {
+            height: fit-content;
+            border-radius: 20px;
+            padding: 7px 11px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .estado-pendiente {
+            background: #fff3cd;
+            color: #806000;
+        }
+
+        .estado-aprobada {
+            background: #e8f7ee;
+            color: #17683a;
+        }
+
+        .estado-rechazada {
+            background: #fdecec;
+            color: #a52222;
+        }
+
+        .resultado {
+            margin: 0 20px 20px;
+            padding: 13px;
+            border-radius: 9px;
+            background: #f3f6fa;
+            color: #46566f;
+            font-size: 14px;
+        }
+
+        .acciones {
+            display: grid;
+            grid-template-columns: auto minmax(280px, 1fr);
+            gap: 14px;
+            padding: 16px 20px;
+            border-top: 1px solid #e7ebf1;
+            background: #fafbfd;
+        }
+
+        .aprobar-form {
+            display: flex;
+            align-items: flex-end;
+        }
+
+        .aprobar-button {
+            height: 44px;
+            border: 0;
+            border-radius: 9px;
+            padding: 0 20px;
+            background: #17683a;
+            color: #ffffff;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .aprobar-button:hover {
+            background: #10572f;
+        }
+
+        .rechazar-form {
+            display: grid;
+            grid-template-columns: minmax(180px, 1fr) auto;
+            gap: 10px;
+        }
+
+        .motivo {
+            min-height: 44px;
+            border: 1px solid #ccd5e2;
+            border-radius: 9px;
+            padding: 11px 12px;
+            resize: vertical;
+            font-family: inherit;
+            font-size: 14px;
+        }
+
+        .motivo:focus {
+            border-color: #2563eb;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+        }
+
+        .rechazar-button {
+            min-height: 44px;
+            border: 1px solid #d83b3b;
+            border-radius: 9px;
+            padding: 0 18px;
+            background: #ffffff;
+            color: #b72b2b;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .rechazar-button:hover {
+            background: #fdecec;
+        }
+
+        .vacio {
+            padding: 55px 24px;
+            border: 1px dashed #bdc7d5;
+            border-radius: 14px;
+            background: #ffffff;
+            color: #62718a;
+            text-align: center;
+        }
+
+        @media (max-width: 760px) {
+            .header {
+                padding: 0 16px;
+            }
+
+            .usuario {
+                display: none;
+            }
+
+            .tarjeta-principal {
+                grid-template-columns: 1fr;
+            }
+
+            .estado {
+                width: fit-content;
+            }
+
+            .acciones {
+                grid-template-columns: 1fr;
+            }
+
+            .aprobar-form {
+                display: block;
+            }
+
+            .aprobar-button {
+                width: 100%;
+            }
+
+            .rechazar-form {
+                grid-template-columns: 1fr;
+            }
+
+            .rechazar-button {
+                height: 44px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="header">
+
+    <div class="brand">
+        My Own · Administración
+    </div>
+
+    <div class="header-right">
+
+        <span
+            class="usuario"
+            th:text="${adminEmail}">
+            administrador@email.com
+        </span>
+
+        <form
+            class="logout-form"
+            th:action="@{/admin-logout}"
+            method="post">
+
+            <button
+                class="logout-button"
+                type="submit">
+
+                Cerrar sesión
+            </button>
+
+        </form>
+
+    </div>
+
+</header>
+
+<main class="container">
+
+    <h1 class="titulo">
+        Especialidades sugeridas
+    </h1>
+
+    <p class="subtitulo">
+        Revisá las propuestas enviadas por los usuarios.
+    </p>
+
+    <div
+        class="mensaje"
+        th:if="${mensajeExito != null}"
+        th:text="${mensajeExito}">
+    </div>
+
+    <nav class="filtros">
+
+        <a
+            class="filtro"
+            th:classappend="${estadoSeleccionado ==
+                T(com.nocta.myown.enums.EstadoEspecialidadPendiente).PENDIENTE}
+                ? ' filtro-activo'
+                : ''"
+            th:href="@{/admin/especialidades(estado='PENDIENTE')}">
+
+            Pendientes
+        </a>
+
+        <a
+            class="filtro"
+            th:classappend="${estadoSeleccionado ==
+                T(com.nocta.myown.enums.EstadoEspecialidadPendiente).APROBADA}
+                ? ' filtro-activo'
+                : ''"
+            th:href="@{/admin/especialidades(estado='APROBADA')}">
+
+            Aprobadas
+        </a>
+
+        <a
+            class="filtro"
+            th:classappend="${estadoSeleccionado ==
+                T(com.nocta.myown.enums.EstadoEspecialidadPendiente).RECHAZADA}
+                ? ' filtro-activo'
+                : ''"
+            th:href="@{/admin/especialidades(estado='RECHAZADA')}">
+
+            Rechazadas
+        </a>
+
+    </nav>
+
+    <div
+        class="vacio"
+        th:if="${sugerencias == null or #lists.isEmpty(sugerencias)}">
+
+        No hay sugerencias para el estado seleccionado.
+    </div>
+
+    <section
+        class="lista"
+        th:if="${sugerencias != null and !#lists.isEmpty(sugerencias)}">
+
+        <article
+            class="tarjeta"
+            th:each="sugerencia : ${sugerencias}">
+
+            <div class="tarjeta-principal">
+
+                <div>
+
+                    <h2
+                        class="nombre"
+                        th:text="${sugerencia.nombre}">
+                        Nombre de la especialidad
+                    </h2>
+
+                    <p
+                        class="descripcion"
+                        th:text="${sugerencia.descripcion}">
+                        Descripción de la propuesta.
+                    </p>
+
+                    <div class="datos">
+
+                        <span>
+                            Usuario:
+
+                            <strong
+                                th:text="${sugerencia.usuarioNombre}">
+                                Usuario
+                            </strong>
+                        </span>
+
+                        <span
+                            th:text="${sugerencia.usuarioEmail}">
+                            email@ejemplo.com
+                        </span>
+
+                        <span>
+                            Enviada:
+
+                            <strong
+                                th:text="${sugerencia.createdAt}">
+                                Fecha
+                            </strong>
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <span
+                    class="estado"
+                    th:classappend="${
+                        sugerencia.estado ==
+                            T(com.nocta.myown.enums.EstadoEspecialidadPendiente).PENDIENTE
+                            ? ' estado-pendiente'
+                            : sugerencia.estado ==
+                                T(com.nocta.myown.enums.EstadoEspecialidadPendiente).APROBADA
+                                ? ' estado-aprobada'
+                                : sugerencia.estado ==
+                                    T(com.nocta.myown.enums.EstadoEspecialidadPendiente).RECHAZADA
+                                    ? ' estado-rechazada'
+                                    : ''
+                    }"
+                    th:text="${sugerencia.estado != null
+                        ? sugerencia.estado
+                        : 'SIN ESTADO'}">
+
+                    PENDIENTE
+                </span>
+
+            </div>
+
+            <div
+                class="resultado"
+                th:if="${sugerencia.estado ==
+                    T(com.nocta.myown.enums.EstadoEspecialidadPendiente).APROBADA}">
+
+                Especialidad creada con ID:
+
+                <strong
+                    th:text="${sugerencia.especialidadId}">
+                    1
+                </strong>
+            </div>
+
+            <div
+                class="resultado"
+                th:if="${sugerencia.estado ==
+                    T(com.nocta.myown.enums.EstadoEspecialidadPendiente).RECHAZADA}">
+
+                <strong>
+                    Motivo del rechazo:
+                </strong>
+
+                <span
+                    th:text="${sugerencia.motivoRechazo}">
+                    Motivo
+                </span>
+            </div>
+
+            <div
+                class="acciones"
+                th:if="${sugerencia.estado ==
+                    T(com.nocta.myown.enums.EstadoEspecialidadPendiente).PENDIENTE}">
+
+                <form
+                    class="aprobar-form"
+                    th:action="@{/admin/especialidades/{id}/aprobar(
+                        id=${sugerencia.id}
+                    )}"
+                    method="post">
+
+                    <button
+                        class="aprobar-button"
+                        type="submit">
+
+                        Aprobar
+                    </button>
+
+                </form>
+
+                <form
+                    class="rechazar-form"
+                    th:action="@{/admin/especialidades/{id}/rechazar(
+                        id=${sugerencia.id}
+                    )}"
+                    method="post">
+
+                    <textarea
+                        class="motivo"
+                        name="motivo"
+                        minlength="5"
+                        maxlength="500"
+                        placeholder="Motivo del rechazo"
+                        required></textarea>
+
+                    <button
+                        class="rechazar-button"
+                        type="submit">
+
+                        Rechazar
+                    </button>
+
+                </form>
+
+            </div>
+
+        </article>
+
+    </section>
+
+</main>
+
+</body>
+</html>
