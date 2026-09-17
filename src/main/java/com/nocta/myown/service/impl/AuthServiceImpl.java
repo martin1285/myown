@@ -53,6 +53,7 @@ public class AuthServiceImpl implements AuthService {
 	                null,
 	                null,
 	                null,
+	                null,
 	                null
 	        );
 	    }
@@ -82,6 +83,7 @@ public class AuthServiceImpl implements AuthService {
 	            accessToken,
 	            refreshToken.getToken(),
 	            usuarioGuardado.getUsuarioId(),
+	            usuarioGuardado.getApellido(),
 	            usuarioGuardado.getNombre(),
 	            usuarioGuardado.getEmail(),
 	            usuarioGuardado.getTelefono()
@@ -107,6 +109,7 @@ public class AuthServiceImpl implements AuthService {
 				refreshToken.getToken(),
 				usuario.getUsuarioId(),
 				usuario.getNombre(),
+				usuario.getApellido(),
 				usuario.getEmail(),
 				usuario.getTelefono());
 					
@@ -147,6 +150,7 @@ public class AuthServiceImpl implements AuthService {
 	            refreshToken.getToken(),
 	            usuario.getUsuarioId(),
 	            usuario.getNombre(),
+	            usuario.getApellido(),
 	            usuario.getEmail(),
 	            usuario.getTelefono());
 	}

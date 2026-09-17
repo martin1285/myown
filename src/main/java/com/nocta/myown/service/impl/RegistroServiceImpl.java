@@ -126,6 +126,7 @@ public class RegistroServiceImpl implements RegistroService {
 
         Usuario usuario = new Usuario();
         usuario.setNombre(pendiente.getNombre());
+        usuario.setApellido(pendiente.getApellido());
         usuario.setEmail(pendiente.getEmail());
         usuario.setTelefono(pendiente.getTelefono());
         usuario.setPasswordHash(pendiente.getPasswordHash());
@@ -156,6 +157,7 @@ public class RegistroServiceImpl implements RegistroService {
                 refreshToken.getToken(),
                 usuario.getUsuarioId(),
                 usuario.getNombre(),
+                usuario.getApellido(),
                 usuario.getEmail(),
                 usuario.getTelefono()
         );
