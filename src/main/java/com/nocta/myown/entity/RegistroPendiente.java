@@ -26,6 +26,9 @@ public class RegistroPendiente {
 
     @Column(name = "nombre", nullable = false, length = 150)
     private String nombre;
+    
+    @Column(name = "apellido", nullable = false, length = 150)
+    private String apellido;
 
     @Column(name = "email", nullable = false, length = 150)
     private String email;

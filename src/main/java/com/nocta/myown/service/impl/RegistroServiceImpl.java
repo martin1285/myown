@@ -69,6 +69,7 @@ public class RegistroServiceImpl implements RegistroService {
 
         RegistroPendiente pendiente = new RegistroPendiente();
         pendiente.setNombre(request.nombre().trim());
+        pendiente.setApellido(request.apellido().trim());
         pendiente.setEmail(email);
         pendiente.setTelefono(request.telefono());
         pendiente.setPasswordHash(passwordEncoder.encode(request.password()));
